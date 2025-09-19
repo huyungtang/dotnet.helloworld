@@ -3,7 +3,7 @@ using webapi.models;
 
 namespace webapi.services
 {
-  public class WebapiContext(DbContextOptions<WebapiContext> options)
+  public class WebapiDBContext(DbContextOptions<WebapiDBContext> options)
     : DbContext(options)
   {
 

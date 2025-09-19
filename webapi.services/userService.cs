@@ -1,8 +1,10 @@
+using webapi.core;
 using webapi.models;
 
 namespace webapi.services
 {
-  public class UserService(WebapiContext context) : BaseService<UserEntity, long>(context)
+  public class UserService(WebapiDBContext dbContext, IContextService context)
+    : BaseService<UserEntity, long>(dbContext, context)
   {
 
     #region Properties ####################################################################################################################

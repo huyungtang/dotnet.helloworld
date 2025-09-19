@@ -1,11 +1,10 @@
 using Microsoft.EntityFrameworkCore;
 using webapi.core;
-using webapi.core.models;
 using webapi.models;
 
 namespace webapi.services
 {
-  public abstract class BaseService<TEntity, TKey>(WebapiContext context)
+  public abstract class BaseService<TEntity, TKey>(WebapiDBContext dbContext, IContextService context)
     : IDisposable
     where TEntity : Entity, IIdentifiable<TKey>
     where TKey : struct
@@ -13,13 +12,15 @@ namespace webapi.services
 
     #region Properties ####################################################################################################################
 
-    private readonly WebapiContext _context = context;
+    private readonly WebapiDBContext _dbContext = dbContext;
+
+    private readonly IContextService _context = context;
 
     protected DbSet<TEntity> DbSet
     {
       get
       {
-        return _context.Set<TEntity>();
+        return _dbContext.Set<TEntity>();
       }
     }
 
@@ -57,9 +58,9 @@ namespace webapi.services
       return GetAvailable().Where(predicate).AsQueryable();
     }
 
-    public virtual Task<TEntity?> GetByIdAsync(TKey id)
+    public virtual ValueTask<TEntity?> GetByIdAsync(TKey id)
     {
-      return DbSet.FindAsync(id).AsTask();
+      return DbSet.FindAsync(id);
     }
 
     public virtual Task<bool> UpdateAsync(TEntity entity)
@@ -69,7 +70,7 @@ namespace webapi.services
 
     public void Dispose()
     {
-      _context?.Dispose();
+      _dbContext?.Dispose();
     }
 
     #endregion ############################################################################################################################
@@ -79,16 +80,22 @@ namespace webapi.services
     private async Task<bool> CreateCoreAsync(TEntity entity)
     {
       // TODO: add shared properties, like created time, creater ...
+      entity.IsA<ICreatedState>(obj =>
+      {
+        obj!.CreatedAt = _context.NowUnixMilli;
+        obj!.CreaterId = _context.CurrentUser?.Id ?? 0;
+      });
+
       DbSet.Add(entity);
 
-      return (await _context.SaveChangesAsync()).Equals(1);
+      return (await _dbContext.SaveChangesAsync()).Equals(1);
     }
 
     private async Task<bool> UpdateCoreAsync(TEntity entity)
     {
       DbSet.Update(entity);
 
-      return (await _context.SaveChangesAsync()).Equals(1);
+      return (await _dbContext.SaveChangesAsync()).Equals(1);
     }
 
     #endregion ############################################################################################################################

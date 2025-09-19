@@ -37,12 +37,12 @@ namespace webapi.middlewares
 
     #region Public Functions ##############################################################################################################
 
-    public async Task InvokeAsync(HttpContext context)
+    public async Task InvokeAsync(HttpContext httpContext)
     {
       //TODO: need to implement - get user information
-      // var _scoped = context.RequestServices.GetService<IContextService>()!;
+      // var _scoped = httpContext.RequestServices.GetService<IContextService>()!;
 
-      await _next(context);
+      await _next(httpContext);
     }
 
     #endregion ############################################################################################################################

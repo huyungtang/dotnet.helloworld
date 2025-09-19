@@ -9,6 +9,7 @@ namespace webapi.services
 
     public IUserDTO? CurrentUser { get; set; }
 
+    public long NowUnixMilli { get => DateTimeOffset.UtcNow.ToUnixTimeMilliseconds(); }
 
     #endregion ############################################################################################################################
 
@@ -25,9 +26,4 @@ namespace webapi.services
     #endregion ############################################################################################################################
   }
 
-  public class UserDTO : IUserDTO
-  {
-    public string Token { get; set; } = "";
-    public int Id { get; set; } = 0;
-  }
 }

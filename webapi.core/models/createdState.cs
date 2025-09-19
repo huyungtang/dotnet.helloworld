@@ -1,13 +1,12 @@
 namespace webapi.core
 {
-  public interface IContextService
+  public interface ICreatedState
   {
 
     #region Properties ####################################################################################################################
 
-    IUserDTO? CurrentUser { get; set; }
-
-    long NowUnixMilli { get; }
+    long CreaterId { get; set; }
+    long CreatedAt { get; set; }
 
     #endregion ############################################################################################################################
 

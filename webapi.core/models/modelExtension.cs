@@ -1,19 +1,28 @@
 namespace webapi.core
 {
-  public interface IContextService
+  public static class ModelExtension
   {
 
     #region Properties ####################################################################################################################
 
-    IUserDTO? CurrentUser { get; set; }
 
-    long NowUnixMilli { get; }
 
     #endregion ############################################################################################################################
 
     #region Public Functions ##############################################################################################################
 
+    public static bool IsA<T>(this object obj, Action<T?>? action)
+      where T : class
+    {
+      if (obj is T)
+      {
+        action?.Invoke(obj as T);
 
+        return true;
+      }
+
+      return false;
+    }
 
     #endregion ############################################################################################################################
 

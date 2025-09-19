@@ -36,9 +36,9 @@ namespace webapi.middlewares
 
     #region Public Functions ##############################################################################################################
 
-    public async Task InvokeAsync(HttpContext context)
+    public async Task InvokeAsync(HttpContext httpContext)
     {
-      await _next(context);
+      await _next(httpContext);
 
       // TODO: formatted return
     }

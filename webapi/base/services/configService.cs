@@ -11,10 +11,7 @@ namespace webapi.services
 
     public bool IsProduction
     {
-      get
-      {
-        return _config.GetValue("IsProduction", false);
-      }
+      get => _config.GetValue("IsProduction", false);
     }
 
     #endregion ############################################################################################################################

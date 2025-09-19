@@ -1,4 +1,4 @@
-namespace webapi.core.models
+namespace webapi.core
 {
   public interface IIdentifiable<TKey>
     where TKey : struct
