@@ -68,6 +68,11 @@ namespace webapi.services
       return UpdateCoreAsync(entity);
     }
 
+    public virtual Task<bool> DeleteAsync(TEntity entity)
+    {
+      return DeleteCoreAsync(entity);
+    }
+
     public void Dispose()
     {
       _dbContext?.Dispose();
@@ -79,7 +84,6 @@ namespace webapi.services
 
     private async Task<bool> CreateCoreAsync(TEntity entity)
     {
-      // TODO: add shared properties, like created time, creater ...
       entity.IsA<ICreatedState>(obj =>
       {
         obj!.CreatedAt = _context.NowUnixMilli;
@@ -88,13 +92,40 @@ namespace webapi.services
 
       DbSet.Add(entity);
 
-      return (await _dbContext.SaveChangesAsync()).Equals(1);
+      return await Commit();
     }
 
     private async Task<bool> UpdateCoreAsync(TEntity entity)
     {
-      DbSet.Update(entity);
+      entity.IsA<IUpdatedState>(obj =>
+      {
+        obj!.UpdatedAt = _context.NowUnixMilli;
+        obj!.UpdaterId = _context.CurrentUser?.Id ?? 0;
+      });
 
+      DbSet.Attach(entity);
+      _dbContext.Entry(entity).State = EntityState.Modified;
+
+      return await Commit();
+    }
+
+    private async Task<bool> DeleteCoreAsync(TEntity entity)
+    {
+      if (entity.IsA<IDeletedState>(obj =>
+      {
+        obj!.IsDeleted = true;
+      }))
+      {
+        return await UpdateCoreAsync(entity);
+      }
+
+      DbSet.Remove(entity);
+
+      return await Commit();
+    }
+
+    private async Task<bool> Commit()
+    {
       return (await _dbContext.SaveChangesAsync()).Equals(1);
     }
 

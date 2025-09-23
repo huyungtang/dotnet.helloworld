@@ -1,13 +1,14 @@
 namespace webapi.core
 {
-  public interface ICreatedState
+  public interface IUpdatedState
   {
 
     #region Properties ####################################################################################################################
 
-    long CreaterId { get; set; }
+    long UpdaterId { get; set; }
 
-    long CreatedAt { get; set; }
+    long UpdatedAt { get; set; }
+
 
     #endregion ############################################################################################################################
 
