@@ -1,24 +1,35 @@
-namespace console.leetcode.testing
+namespace console.leetcode
 {
-  public class TestLongestCommonPrefix
+  public partial class Solution
   {
 
     #region Properties ####################################################################################################################
 
-    private readonly Solution _service = new Solution();
+
 
     #endregion ############################################################################################################################
 
     #region Public Functions ##############################################################################################################
 
-    [Theory]
-    [InlineData(new string[] { "flower", "flow", "flight" }, "fl")]
-    [InlineData(new string[] { "dog", "racecar", "car" }, "")]
-    [InlineData(new string[] { "cat" }, "cat")]
-    [InlineData(new string[] { "cat", "" }, "")]
-    public void LongestCommonPrefix(string[] strs, string prefix)
+    public int RemoveDuplicates(int[] nums)
     {
-      Assert.Equal(_service.LongestCommonPrefix(strs), prefix);
+      if (nums.Length == 0)
+      {
+        return 0;
+      }
+
+      int cnt = 1;
+
+      for (int i = 1; i < nums.Length; i++)
+      {
+        if (nums[cnt - 1] != nums[i])
+        {
+          nums[cnt] = nums[i];
+          cnt++;
+        }
+      }
+
+      return cnt;
     }
 
     #endregion ############################################################################################################################

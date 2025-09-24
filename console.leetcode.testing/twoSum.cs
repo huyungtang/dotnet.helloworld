@@ -1,4 +1,3 @@
-
 namespace console.leetcode.testing
 {
   public class TestTwoSum
