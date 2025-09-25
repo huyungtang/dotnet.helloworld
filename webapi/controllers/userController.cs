@@ -1,5 +1,6 @@
 using Microsoft.AspNetCore.Mvc;
 using webapi.core;
+using webapi.interfaces;
 using webapi.models;
 using webapi.Providers;
 using webapi.services;
@@ -30,10 +31,11 @@ namespace webapi.controllers
 
       Console.WriteLine($"---------- Current Number: {SingletonProvider.Context.Current()}");
       Console.WriteLine($"---------- Is Production: {_configService.IsProduction}");
-      _carService.Accele("car");
-      _carService.Break("car");
-      _carService.Accele("suv");
-      _carService.Break("suv");
+      _carService.Accele<ISedanCar>();
+      _carService.Break<ISedanCar>();
+      _carService.Accele<ISUVCar>();
+      _carService.Break<ISUVCar>();
+
       //TODO: Handle not found
 
       return user;

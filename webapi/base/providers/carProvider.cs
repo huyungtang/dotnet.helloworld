@@ -1,31 +1,28 @@
+using webapi.interfaces;
+using webapi.services;
+
 namespace webapi.Providers
 {
-  public class SingletonProvider
+  public interface ICarProvider
   {
+    ICar? CreateCar<T>() where T : ICar;
+  }
 
-    private SingletonProvider() { }
+  public class CarProvider(IServiceProvider provider) : ICarProvider, ISingleton
+  {
 
     #region Properties ####################################################################################################################
 
-    private static Lazy<SingletonProvider> _context = new Lazy<SingletonProvider>(() => new SingletonProvider());
-
-    private int Counter { get; set; } = 0;
-
-    public static SingletonProvider Context
-    {
-      get
-      {
-        return _context.Value;
-      }
-    }
+    private readonly IServiceProvider _provider = provider;
 
     #endregion ############################################################################################################################
 
     #region Public Functions ##############################################################################################################
 
-    public int Current()
+    public ICar? CreateCar<T>()
+      where T : ICar
     {
-      return ++Counter;
+      return _provider.GetService<T>();
     }
 
     #endregion ############################################################################################################################

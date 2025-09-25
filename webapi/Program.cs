@@ -1,6 +1,7 @@
 using webapi.services;
 using webapi.middlewares;
 using Microsoft.EntityFrameworkCore;
+using System.Reflection;
 
 var builder = WebApplication.CreateBuilder(args);
 

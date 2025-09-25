@@ -1,13 +1,10 @@
+using webapi.interfaces;
+using webapi.Providers;
+
 namespace webapi.services
 {
-  public interface ICar
-  {
-    void Accele();
 
-    void Break();
-  }
-
-  public class Car : ICar, ITransient
+  public class Car : ISedanCar, ISingleton
   {
     public void Accele()
     {
@@ -20,7 +17,7 @@ namespace webapi.services
     }
   }
 
-  public class SUVCar : ICar, ITransient
+  public class SUVCar : ISUVCar, ISingleton
   {
     public void Accele()
     {
@@ -33,64 +30,36 @@ namespace webapi.services
     }
   }
 
-  public class CarService(IEnumerable<ICar> cars) : ICarService, ISingleton
+  public class CarService(ICarProvider provider) : ICarService, ISingleton
   {
 
     #region Properties ####################################################################################################################
 
-    private readonly IEnumerable<ICar> _cars = cars;
+    private readonly ICarProvider _provider = provider;
 
     #endregion ############################################################################################################################
 
     #region Public Functions ##############################################################################################################
 
-    public void Accele(string carType)
+    public void Accele<T>()
+      where T : ICar
     {
-      var instance = GetInstance(carType);
-      if (instance != null)
-      {
-        instance.Accele();
-      }
+      _provider.CreateCar<T>()?.Accele();
     }
 
-    public void Break(string carType)
+    public void Break<T>()
+      where T : ICar
     {
-      var instance = GetInstance(carType);
-      if (instance != null)
-      {
-        instance.Break();
-      }
+      _provider.CreateCar<T>()?.Break();
     }
 
     #endregion ############################################################################################################################
 
     #region Private Functions #############################################################################################################
 
-    private ICar? GetInstance(string carType)
-    {
-      ICar? instance = null;
-      switch (carType)
-      {
-        case "car":
-          instance = _cars.FirstOrDefault(x => x.GetType().Name == "Car");
-          break;
-        case "suv":
-          instance = _cars.FirstOrDefault(x => x.GetType().Name == "SUVCar");
-          break;
-      }
-
-      return instance;
-    }
 
     #endregion ############################################################################################################################
 
-  }
-
-  public interface ICarService
-  {
-    void Accele(string carType);
-
-    void Break(string carType);
   }
 
 }
