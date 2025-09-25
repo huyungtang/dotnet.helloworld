@@ -1,24 +1,32 @@
-using webapi.core;
-
-namespace webapi.services
+namespace webapi.Providers
 {
-  public sealed class ConfigService(IConfiguration config) : IConfigService, ISingleton
+  public class SingletonProvider
   {
+
+    private SingletonProvider() { }
 
     #region Properties ####################################################################################################################
 
-    private readonly IConfiguration _config = config;
+    private static Lazy<SingletonProvider> _context = new Lazy<SingletonProvider>(() => new SingletonProvider());
 
-    public bool IsProduction
+    private int Counter { get; set; } = 0;
+
+    public static SingletonProvider Context
     {
-      get => _config.GetValue("IsProduction", false);
+      get
+      {
+        return _context.Value;
+      }
     }
 
     #endregion ############################################################################################################################
 
     #region Public Functions ##############################################################################################################
 
-
+    public int Current()
+    {
+      return ++Counter;
+    }
 
     #endregion ############################################################################################################################
 

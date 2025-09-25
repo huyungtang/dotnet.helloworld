@@ -19,7 +19,10 @@ namespace webapi.services
               ?.GetTypes()
               .Where(tp => tp.IsClass
                         && !tp.IsAbstract
-                        && tp.GetInterfaces().Any(i => i == typeof(ISingleton) || i == typeof(IScoped) || i == typeof(ITransient)))
+                        && tp.GetInterfaces()
+                             .Any(i => i == typeof(ISingleton)
+                                    || i == typeof(IScoped)
+                                    || i == typeof(ITransient)))
               .ToList()
               .ForEach(tp =>
               {
@@ -56,6 +59,7 @@ namespace webapi.services
   }
 
   public interface ISingleton { }
+
 
   public interface IScoped { }
 

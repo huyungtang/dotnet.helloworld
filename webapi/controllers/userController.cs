@@ -1,15 +1,23 @@
 using Microsoft.AspNetCore.Mvc;
+using webapi.core;
 using webapi.models;
+using webapi.Providers;
 using webapi.services;
 
 namespace webapi.controllers
 {
-  public class UserController(UserService userService) : BaseController
+  public sealed class UserController(
+    UserService userService,
+    IConfigService configService,
+    ICarService carService)
+    : BaseController
   {
 
     #region Properties ####################################################################################################################
 
     private readonly UserService _userService = userService;
+    private readonly IConfigService _configService = configService;
+    private readonly ICarService _carService = carService;
 
     #endregion ############################################################################################################################
 
@@ -20,6 +28,12 @@ namespace webapi.controllers
     {
       var user = await _userService.GetByIdAsync(id);
 
+      Console.WriteLine($"---------- Current Number: {SingletonProvider.Context.Current()}");
+      Console.WriteLine($"---------- Is Production: {_configService.IsProduction}");
+      _carService.Accele("car");
+      _carService.Break("car");
+      _carService.Accele("suv");
+      _carService.Break("suv");
       //TODO: Handle not found
 
       return user;
