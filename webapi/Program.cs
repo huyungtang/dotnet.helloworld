@@ -1,14 +1,14 @@
 using webapi.services;
 using webapi.middlewares;
 using Microsoft.EntityFrameworkCore;
-using System.Reflection;
 
 var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
 // Learn more about configuring OpenAPI at https://aka.ms/aspnet/openapi
 builder.Services.AddOpenApi();
-builder.Services.AddDbContext<WebapiDBContext>(options => options.UseSqlServer(builder.Configuration.GetConnectionString("Webapi")));
+builder.Services.AddDbContext<WebapiDBContext>(
+    options => options.UseSqlServer(builder.Configuration.GetConnectionString("Webapi"), b => b.MigrationsAssembly("webapi")));
 builder.Services.AddProjectServicesRegistraction();
 builder.Services.AddWebapiServicesRegistration();
 builder.Services.AddControllers();
@@ -19,6 +19,7 @@ var app = builder.Build();
 if (app.Environment.IsDevelopment())
 {
     app.MapOpenApi();
+    app.MapWebapiMigration();
 }
 
 app.UseHttpsRedirection();

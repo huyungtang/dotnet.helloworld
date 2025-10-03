@@ -1,39 +1,27 @@
-using System.ComponentModel.DataAnnotations;
-using System.ComponentModel.DataAnnotations.Schema;
-using webapi.core;
+using Microsoft.EntityFrameworkCore;
 
-namespace webapi.models
+namespace webapi.services
 {
-  [Table(name: "user")]
-  public class UserEntity : Entity, IIdentifiable<long>, ICreatedState, IDeletedState
+  public static class WebapiMigration
   {
 
     #region Properties ####################################################################################################################
 
-    [Key]
-    [Column(name: "id", TypeName = "BIGINT")]
-    public long Id { get; set; }
 
-    [Column(name: "username", TypeName = "NVARCHAR(50)")]
-    public string Username { get; set; } = "";
-
-    [Column(name: "password", TypeName = "NVARCHAR(100)")]
-    public string Password { get; set; } = "";
-
-    [Column(name: "creater_id", TypeName = "BIGINT")]
-    public long CreaterId { get; set; } = 0;
-
-    [Column(name: "created_at", TypeName = "BIGINT")]
-    public long CreatedAt { get; set; } = 0;
-
-    [Column(name: "is_deleted", TypeName = "BIT")]
-    public bool IsDeleted { get; set; } = false;
 
     #endregion ############################################################################################################################
 
     #region Public Functions ##############################################################################################################
 
+    public static async void MapWebapiMigration(this IApplicationBuilder builder)
+    {
+      using (var scope = builder.ApplicationServices.CreateScope())
+      {
+        var context = scope.ServiceProvider.GetRequiredService<WebapiDBContext>();
 
+        await context.Database.MigrateAsync();
+      }
+    }
 
     #endregion ############################################################################################################################
 
