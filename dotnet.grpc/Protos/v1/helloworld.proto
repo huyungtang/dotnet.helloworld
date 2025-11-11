@@ -1,0 +1,28 @@
+﻿syntax = "proto3";
+
+import "google/api/annotations.proto";
+
+package dotnet.grpc.v1;
+option csharp_namespace = "dotnet.grpc.v1";
+
+service HelloWorld {
+  rpc Hello (HelloWorldRequest) returns (HelloWorldReply){
+    option (google.api.http) = {
+      get: "/v1/helloworld/hello/{message}"
+    };
+  }
+
+  rpc Echo (HelloWorldRequest) returns (HelloWorldReply){
+    option (google.api.http) = {
+      get: "/v1/helloworld/echo"
+    };
+  }
+}
+
+message HelloWorldRequest {
+  string message = 1;
+}
+
+message HelloWorldReply {
+  string message = 1;
+}
