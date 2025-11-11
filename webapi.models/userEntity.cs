@@ -1,9 +1,17 @@
-using System.ComponentModel.DataAnnotations;
+﻿using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 using webapi.core;
 
 namespace webapi.models
 {
+
+  public enum GenderEnum
+  {
+    None = 0,
+    Male = 1,
+    Female = 2,
+  }
+
   [Table(name: "user")]
   public class UserEntity : Entity, IIdentifiable<long>, ICreatedState, IDeletedState
   {
@@ -19,6 +27,9 @@ namespace webapi.models
 
     [Column(name: "password", TypeName = "NVARCHAR(100)")]
     public string Password { get; set; } = "";
+
+    [Column(name: "gender", TypeName ="NVARCHAR(10)")]
+    public GenderEnum Gender { get; set; }
 
     [Column(name: "creater_id", TypeName = "BIGINT")]
     public long CreaterId { get; set; } = 0;
@@ -44,4 +55,5 @@ namespace webapi.models
     #endregion ############################################################################################################################
 
   }
+
 }

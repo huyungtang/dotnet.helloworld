@@ -17,9 +17,9 @@ namespace webapi.Migrations
 #pragma warning disable 612, 618
             modelBuilder
                 .HasAnnotation("ProductVersion", "9.0.9")
-                .HasAnnotation("Relational:MaxIdentifierLength", 128);
+                .HasAnnotation("Relational:MaxIdentifierLength", 64);
 
-            SqlServerModelBuilderExtensions.UseIdentityColumns(modelBuilder);
+            MySqlModelBuilderExtensions.AutoIncrementColumns(modelBuilder);
 
             modelBuilder.Entity("webapi.models.UserEntity", b =>
                 {
@@ -28,7 +28,7 @@ namespace webapi.Migrations
                         .HasColumnType("BIGINT")
                         .HasColumnName("id");
 
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<long>("Id"));
+                    MySqlPropertyBuilderExtensions.UseMySqlIdentityColumn(b.Property<long>("Id"));
 
                     b.Property<long>("CreatedAt")
                         .HasColumnType("BIGINT")
@@ -38,7 +38,12 @@ namespace webapi.Migrations
                         .HasColumnType("BIGINT")
                         .HasColumnName("creater_id");
 
-                    b.Property<bool>("IsDeleted")
+                    b.Property<string>("Gender")
+                        .IsRequired()
+                        .HasColumnType("NVARCHAR(10)")
+                        .HasColumnName("gender");
+
+                    b.Property<ulong>("IsDeleted")
                         .HasColumnType("BIT")
                         .HasColumnName("is_deleted");
 

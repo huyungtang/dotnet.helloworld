@@ -1,4 +1,4 @@
-using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Mvc;
 using webapi.core;
 using webapi.interfaces;
 using webapi.models;
@@ -42,11 +42,14 @@ namespace webapi.controllers
     }
 
     [HttpPost()]
-    public async Task<long> Create([FromBody] UserEntity user)
+    public async Task<UserEntity> Create([FromBody] UserEntity? user)
     {
-      await _userService.CreateAsync(user);
+      if (user != null)
+      {
+        await _userService.CreateAsync(user);
+      }
 
-      return user.Id;
+      return new UserEntity { Id = user?.Id ?? 0 };
     }
 
     [HttpPut()]

@@ -7,7 +7,7 @@ namespace webapi.Providers
 
     #region Properties ####################################################################################################################
 
-    private static Lazy<SingletonProvider> _context = new Lazy<SingletonProvider>(() => new SingletonProvider());
+    private static readonly Lazy<SingletonProvider> _context = new (() => new SingletonProvider());
 
     private int Counter { get; set; } = 0;
 

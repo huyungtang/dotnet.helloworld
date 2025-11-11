@@ -11,8 +11,8 @@ using webapi.services;
 namespace webapi.Migrations
 {
     [DbContext(typeof(WebapiDBContext))]
-    [Migration("20251003033703_Migration_USERNAME_LENGTH")]
-    partial class Migration_USERNAME_LENGTH
+    [Migration("20251107004452_Create_User_Gender")]
+    partial class Create_User_Gender
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -20,9 +20,9 @@ namespace webapi.Migrations
 #pragma warning disable 612, 618
             modelBuilder
                 .HasAnnotation("ProductVersion", "9.0.9")
-                .HasAnnotation("Relational:MaxIdentifierLength", 128);
+                .HasAnnotation("Relational:MaxIdentifierLength", 64);
 
-            SqlServerModelBuilderExtensions.UseIdentityColumns(modelBuilder);
+            MySqlModelBuilderExtensions.AutoIncrementColumns(modelBuilder);
 
             modelBuilder.Entity("webapi.models.UserEntity", b =>
                 {
@@ -31,7 +31,7 @@ namespace webapi.Migrations
                         .HasColumnType("BIGINT")
                         .HasColumnName("id");
 
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<long>("Id"));
+                    MySqlPropertyBuilderExtensions.UseMySqlIdentityColumn(b.Property<long>("Id"));
 
                     b.Property<long>("CreatedAt")
                         .HasColumnType("BIGINT")
@@ -41,9 +41,19 @@ namespace webapi.Migrations
                         .HasColumnType("BIGINT")
                         .HasColumnName("creater_id");
 
-                    b.Property<bool>("IsDeleted")
+                    b.Property<string>("Gender")
+                        .IsRequired()
+                        .HasColumnType("NVARCHAR(10)")
+                        .HasColumnName("gender");
+
+                    b.Property<ulong>("IsDeleted")
                         .HasColumnType("BIT")
                         .HasColumnName("is_deleted");
+
+                    b.Property<string>("Password")
+                        .IsRequired()
+                        .HasColumnType("NVARCHAR(100)")
+                        .HasColumnName("password");
 
                     b.Property<string>("Username")
                         .IsRequired()
